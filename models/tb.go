@@ -27,6 +27,12 @@ type TbInformation struct {
 	Deskripsi  string    `json:"deskripsi" form:"deskripsi"`
 }
 
+type TbComment struct {
+	gorm.Model
+	Name    string `json:"name" form:"name"`
+	Comment string `json:"comment" form:"comment"`
+}
+
 func (base *Base) BeforeCreate(tx *gorm.DB) error {
 	uuid := uuid.NewV4().String()
 	tx.Statement.SetColumn("ID", uuid)

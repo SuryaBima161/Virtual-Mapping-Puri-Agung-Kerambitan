@@ -25,3 +25,15 @@ func GetAdminById(id uint) (resp payload.GetAdmin, err error) {
 	}
 	return
 }
+
+func UpdateAdmin(id uint, resp payload.UpdateAdmin) error {
+	admin, err := database.UpdateAdmin(id)
+	if err != nil {
+		return err
+	}
+	resp = payload.UpdateAdmin{
+		Username: admin.Username,
+		Password: admin.Password,
+	}
+	return nil
+}

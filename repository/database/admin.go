@@ -19,3 +19,9 @@ func GetAdminAll(req *models.TbLogin) ([]models.TbLogin, error) {
 	}
 	return admin, nil
 }
+func UpdateAdmin(id uint) (resp *models.TbLogin, err error) {
+	if err := config.DB.Where("user_id =?", id).Save(&resp).Error; err != nil {
+		return resp, err
+	}
+	return resp, nil
+}
