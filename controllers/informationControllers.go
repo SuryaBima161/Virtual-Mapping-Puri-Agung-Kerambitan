@@ -15,7 +15,7 @@ func CreateInformation(c echo.Context) error {
 	if err := c.Validate(req); err != nil {
 		return err
 	}
-	if err := usecase.CreateInformation(&req); err != nil {
+	if err := usecase.CreateInformation(c); err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
 	return c.JSON(http.StatusOK, map[string]interface{}{
@@ -38,7 +38,7 @@ func UpdateInfortmation(c echo.Context) error {
 	})
 }
 
-func DeleteInfortmation(c echo.Context) error {
+func DeleteInformation(c echo.Context) error {
 	id := c.Param("id")
 	if err := usecase.DeleteInfortmation(uuid.FromStringOrNil(id)); err != nil {
 		return c.JSON(http.StatusBadRequest, echo.NewHTTPError(http.StatusBadRequest, err.Error()))
@@ -48,7 +48,7 @@ func DeleteInfortmation(c echo.Context) error {
 	})
 }
 
-func GetProductsController(c echo.Context) error {
+func GetInformation(c echo.Context) error {
 	var inf []payload.GetInformationRespone
 	inf, err := usecase.GetInformation()
 	if err != nil {

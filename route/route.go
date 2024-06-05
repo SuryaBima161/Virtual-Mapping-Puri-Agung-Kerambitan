@@ -3,8 +3,11 @@ package route
 import (
 	"github.com/labstack/echo/v4"
 
+	"demonstrasi/constants"
 	"demonstrasi/controllers"
 	m "demonstrasi/middlewares"
+
+	jwt "github.com/labstack/echo-jwt/v4"
 
 	"github.com/labstack/echo/v4/middleware"
 )
@@ -19,6 +22,23 @@ func New() *echo.Echo {
 	e.POST("/register", controllers.RegisterController)
 	e.POST("/login", controllers.LoginController)
 
+	admin := e.Group("admin", jwt.JWT([]byte(constants.SECRET_KEY)))
+
+	inf := admin.Group("information")
+	inf.POST("/information", controllers.CreateInformation)
+	inf.GET("/information", controllers.GetInformation)
+	inf.GET("/information/:id", controllers.GetCommentById)
+	inf.DELETE("/information", controllers.DeleteInformation)
+	inf.PUT("/information", controllers.UpdateInfortmation)
+
+	commentAdmin := admin.Group("comment")
+	commentAdmin.DELETE("/comment", controllers.DeleteComment)
+	commentAdmin.GET("/comment", controllers.GetComment)
+
+	user := e.Group("user")
+
+	commentUser := user.Group("comment")
+	commentUser.POST("/comment", controllers.CreateComment)
 	return e
 }
 

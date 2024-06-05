@@ -21,16 +21,23 @@ type Base struct {
 }
 
 type TbInformation struct {
-	IDLogin    uuid.UUID `json:"id_login" form:"id_login"`
-	JudulFoto  string    `json:"judul_foto" form:"judul_foto"`
-	NamaLokasi string    `json:"nama_lokasi" form:"nama_lokasi"`
-	Deskripsi  string    `json:"deskripsi" form:"deskripsi"`
+	IDLogin    uint   `json:"id_login" form:"id_login"`
+	JudulFoto  string `json:"judul_foto" form:"judul_foto"`
+	NamaLokasi string `json:"nama_lokasi" form:"nama_lokasi"`
+	Deskripsi  string `json:"deskripsi" form:"deskripsi"`
 }
 
 type TbComment struct {
-	gorm.Model
-	Name    string `json:"name" form:"name"`
-	Comment string `json:"comment" form:"comment"`
+	IDComment uuid.UUID `json:"id_comment" form:"id_comment"`
+	Name      string    `json:"name" form:"name"`
+	Comment   string    `json:"comment" form:"comment"`
+}
+
+type TbGalery struct {
+	IDGalery       uuid.UUID     `json:"id_galery" form:"id_galery"`
+	TbInformation  TbInformation `json:"tb_information" form:"tb_information"`
+	Id_Information uuid.UUID     `json:"id_information" form:"id_information"`
+	Image          string        `json:"image" form:"image"`
 }
 
 func (base *Base) BeforeCreate(tx *gorm.DB) error {

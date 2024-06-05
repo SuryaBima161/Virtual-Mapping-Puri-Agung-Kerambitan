@@ -5,12 +5,24 @@ import (
 	"demonstrasi/models/payload"
 	"demonstrasi/repository/database"
 	"fmt"
+	"net/http"
 
+	"github.com/golang-jwt/jwt/v5"
+	"github.com/labstack/echo/v4"
 	uuid "github.com/satori/go.uuid"
 )
 
-func CreateInformation(req *payload.AddInformation) error {
+func CreateInformation(c echo.Context) error {
+	user := c.Get("user").(*jwt.Token)
+	claims := user.Claims.(jwt.MapClaims)
+	userID := uint(claims["user_id"].(float64)) // Past
+
+	req := new(payload.AddInformation)
+	if err := c.Bind(req); err != nil {
+		return c.JSON(http.StatusBadRequest, map[string]string{"message": "Invalid request"})
+	}
 	inf := models.TbInformation{
+		IDLogin:    userID,
 		NamaLokasi: req.NamaLokasi,
 		JudulFoto:  req.JudulFoto,
 		Deskripsi:  req.Deskripsi,

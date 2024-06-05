@@ -15,7 +15,7 @@ func CreateInformation(req *models.TbInformation) error {
 }
 
 func UpdateInfortmation(id uuid.UUID, inf *models.TbInformation) error {
-	if err := config.DB.Model(&inf.JudulFoto).Where("id = ?", id).Updates(inf).Error; err != nil {
+	if err := config.DB.Model(inf).Where("id = ?", id).Updates(inf).Error; err != nil {
 		return err
 	}
 	return nil
