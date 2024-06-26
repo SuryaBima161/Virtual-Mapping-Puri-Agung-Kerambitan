@@ -41,8 +41,8 @@ func GetComment(c echo.Context) error {
 	}
 
 	return c.JSON(http.StatusOK, map[string]interface{}{
-		"message":  "success get all comments",
-		"products": comment,
+		"message": "success get all comments",
+		"data":    comment,
 	})
 }
 
@@ -57,4 +57,19 @@ func GetCommentById(c echo.Context) error {
 		"data":    comment,
 	})
 
+}
+
+func UpdateReplyComment(c echo.Context) error {
+	var inf payload.ReplyCommentRequest
+	id := c.Param("id")
+	c.Bind(&inf)
+	if err := c.Validate(inf); err != nil {
+		return err
+	}
+	if err := usecase.UpdateReplyComment(uuid.FromStringOrNil(id), &inf); err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
+	}
+	return c.JSON(http.StatusOK, map[string]interface{}{
+		"message": "success reply comment",
+	})
 }

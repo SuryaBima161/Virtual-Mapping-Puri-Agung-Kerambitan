@@ -11,8 +11,10 @@ import (
 
 func CreateComment(req *payload.AddComment) error {
 	comment := models.TbComment{
-		Name:    req.Name,
-		Comment: req.Comment,
+		Id_Galery: req.Id_Galery,
+		Name:      req.Name,
+		Comment:   req.Comment,
+		Rating:    req.Rating,
 	}
 	if err := database.CreateComment(&comment); err != nil {
 		return err
@@ -58,4 +60,18 @@ func DeleteComment(id uuid.UUID) (err error) {
 		return err
 	}
 	return nil
+}
+
+func UpdateReplyComment(id uuid.UUID, req *payload.ReplyCommentRequest) (err error) {
+	if _, err := database.GetCommentById(id); err != nil {
+		return err
+	}
+	inf := models.TbComment{
+		ReplyComment: req.ReplyComment,
+	}
+	if err := database.UpdateReplyComment(id, &inf); err != nil {
+		return err
+	}
+	return nil
+
 }

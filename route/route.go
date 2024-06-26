@@ -21,24 +21,36 @@ func New() *echo.Echo {
 	e.Use(middleware.CORS())
 	e.POST("/register", controllers.RegisterController)
 	e.POST("/login", controllers.LoginController)
+	e.POST("/comment", controllers.CreateComment)
+	e.GET("/homepage", controllers.GetHomePage)
 
-	admin := e.Group("admin", jwt.JWT([]byte(constants.SECRET_KEY)))
+	admin := e.Group("/admin", jwt.JWT([]byte(constants.SECRET_KEY)))
 
-	inf := admin.Group("information")
-	inf.POST("/information", controllers.CreateInformation)
-	inf.GET("/information", controllers.GetInformation)
-	inf.GET("/information/:id", controllers.GetCommentById)
-	inf.DELETE("/information", controllers.DeleteInformation)
-	inf.PUT("/information", controllers.UpdateInfortmation)
+	inf := admin.Group("/information")
+	inf.POST("", controllers.CreateInformation)
+	inf.GET("", controllers.GetInformation)
+	inf.GET("/:id", controllers.GetCommentById)
+	inf.DELETE("/:id", controllers.DeleteInformation)
+	inf.PUT("/:id", controllers.UpdateInfortmation)
 
-	commentAdmin := admin.Group("comment")
-	commentAdmin.DELETE("/comment", controllers.DeleteComment)
-	commentAdmin.GET("/comment", controllers.GetComment)
+	monument := admin.Group("/monument", jwt.JWT([]byte(constants.SECRET_KEY)))
+	monument.POST("", controllers.CreateMonument)
+	monument.GET("", controllers.GetMonument)
 
-	user := e.Group("user")
+	commentAdmin := admin.Group("/comment")
+	commentAdmin.DELETE("", controllers.DeleteComment)
+	commentAdmin.GET("", controllers.GetComment)
+	commentAdmin.POST("", controllers.CreateComment)
+	commentAdmin.PUT("/:id", controllers.UpdateReplyComment)
 
-	commentUser := user.Group("comment")
-	commentUser.POST("/comment", controllers.CreateComment)
+	galeryAdmin := admin.Group("/galery")
+	galeryAdmin.POST("", controllers.CreateGalery)
+	galeryAdmin.GET("", controllers.GetGalery)
+
+	user := e.Group("/user")
+
+	commentUser := user.Group("/comment")
+	commentUser.POST("", controllers.CreateComment)
 	return e
 }
 

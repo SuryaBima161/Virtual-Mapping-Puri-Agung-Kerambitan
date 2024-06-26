@@ -3,6 +3,8 @@ package database
 import (
 	"demonstrasi/config"
 	"demonstrasi/models"
+	"demonstrasi/models/payload"
+	"fmt"
 
 	uuid "github.com/satori/go.uuid"
 )
@@ -43,4 +45,21 @@ func GetGalery() ([]models.TbGalery, error) {
 		return galery, err
 	}
 	return galery, nil
+}
+
+func GetGaleryWithAvgRating() ([]payload.GaleryWithRating, error) {
+	var galeries []payload.GaleryWithRating
+	query := `
+       SELECT g.id as id, g.image, COALESCE(AVG(c.rating), 0) as rating
+        FROM tb_galeries g
+        LEFT JOIN tb_comments c ON g.id = c.id_galery
+        GROUP BY g.id
+        ORDER BY rating DESC
+        LIMIT 4
+    `
+	err := config.DB.Raw(query).Scan(&galeries).Error
+	if err != nil {
+		return nil, fmt.Errorf("error querying galery: %v", err)
+	}
+	return galeries, nil
 }

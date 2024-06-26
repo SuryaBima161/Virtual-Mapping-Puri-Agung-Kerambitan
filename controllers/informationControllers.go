@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"demonstrasi/middlewares"
 	"demonstrasi/models/payload"
 	"demonstrasi/usecase"
 	"net/http"
@@ -11,11 +12,12 @@ import (
 
 func CreateInformation(c echo.Context) error {
 	var req payload.AddInformation
+	loginID := middlewares.GetUserLoginId(c)
 	c.Bind(&req)
 	if err := c.Validate(req); err != nil {
 		return err
 	}
-	if err := usecase.CreateInformation(c); err != nil {
+	if err := usecase.CreateInformation(&req, loginID); err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
 	return c.JSON(http.StatusOK, map[string]interface{}{
@@ -57,7 +59,7 @@ func GetInformation(c echo.Context) error {
 
 	return c.JSON(http.StatusOK, map[string]interface{}{
 		"message":  "success get all information",
-		"products": inf,
+		"data": inf,
 	})
 }
 

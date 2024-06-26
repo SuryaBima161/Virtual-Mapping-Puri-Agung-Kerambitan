@@ -5,24 +5,13 @@ import (
 	"demonstrasi/models/payload"
 	"demonstrasi/repository/database"
 	"fmt"
-	"net/http"
 
-	"github.com/golang-jwt/jwt/v5"
-	"github.com/labstack/echo/v4"
 	uuid "github.com/satori/go.uuid"
 )
 
-func CreateInformation(c echo.Context) error {
-	user := c.Get("user").(*jwt.Token)
-	claims := user.Claims.(jwt.MapClaims)
-	userID := uint(claims["user_id"].(float64)) // Past
-
-	req := new(payload.AddInformation)
-	if err := c.Bind(req); err != nil {
-		return c.JSON(http.StatusBadRequest, map[string]string{"message": "Invalid request"})
-	}
+func CreateInformation(req *payload.AddInformation, loginID uint) error {
 	inf := models.TbInformation{
-		IDLogin:    userID,
+		IDLogin:    loginID,
 		NamaLokasi: req.NamaLokasi,
 		JudulFoto:  req.JudulFoto,
 		Deskripsi:  req.Deskripsi,
@@ -57,9 +46,10 @@ func GetInformation() (resp []payload.GetInformationRespone, err error) {
 	resp = make([]payload.GetInformationRespone, len(inf))
 	for i, data := range inf {
 		resp[i] = payload.GetInformationRespone{
-			JudulFoto:  data.JudulFoto,
-			NamaLokasi: data.JudulFoto,
-			Deskripsi:  data.Deskripsi,
+			Id_Information: data.ID,
+			JudulFoto:      data.JudulFoto,
+			NamaLokasi:     data.JudulFoto,
+			Deskripsi:      data.Deskripsi,
 		}
 	}
 

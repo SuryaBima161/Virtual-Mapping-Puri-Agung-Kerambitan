@@ -37,3 +37,12 @@ func DeleteComment(id uuid.UUID) error {
 	}
 	return nil
 }
+
+func UpdateReplyComment(id uuid.UUID, inf *models.TbComment) error {
+	if err := config.DB.Model(inf).Where("id = ?", id).Updates(inf).Error; err != nil {
+		return err
+	}
+	return nil
+}
+
+

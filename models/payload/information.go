@@ -1,5 +1,7 @@
 package payload
 
+import uuid "github.com/satori/go.uuid"
+
 type AddInformation struct {
 	JudulFoto  string `json:"judul_foto" form:"judul_foto"`
 	NamaLokasi string `json:"nama_lokasi" form:"nama_lokasi"`
@@ -13,7 +15,8 @@ type UpdateInfortmation struct {
 }
 
 type GetInformationRespone struct {
-	JudulFoto  string `json:"judul_foto" form:"judul_foto"`
-	NamaLokasi string `json:"nama_lokasi" form:"nama_lokasi"`
-	Deskripsi  string `json:"deskripsi" form:"deskripsi"`
+	Id_Information uuid.UUID `json:"id_information" form:"id_information"`
+	JudulFoto      string    `json:"judul_foto" form:"judul_foto"`
+	NamaLokasi     string    `json:"nama_lokasi" form:"nama_lokasi"`
+	Deskripsi      string    `json:"deskripsi" form:"deskripsi"`
 }
