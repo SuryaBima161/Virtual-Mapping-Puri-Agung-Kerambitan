@@ -3,6 +3,7 @@ package database
 import (
 	"demonstrasi/config"
 	"demonstrasi/models"
+	"fmt"
 
 	uuid "github.com/satori/go.uuid"
 )
@@ -21,11 +22,17 @@ func UpdateMonument(id uuid.UUID, monument *models.TbMonument) error {
 	return nil
 }
 
-func GetMonumentById(id uuid.UUID) (resp models.TbMonument, err error) {
-	if err := config.DB.Where("id = ?", id).First(&resp).Error; err != nil {
-		return resp, err
+func GetMonumentById(id uuid.UUID) (models.TbMonument, error) {
+	var monument models.TbMonument
+	err := config.DB.
+		Preload("TbInformation").
+		Where("id = ?", id).
+		First(&monument).
+		Error
+	if err != nil {
+		return monument, fmt.Errorf("error querying monument: %v", err)
 	}
-	return
+	return monument, nil
 }
 
 func DeleteMonument(id uuid.UUID) error {

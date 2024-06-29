@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	"github.com/labstack/echo/v4"
+	uuid "github.com/satori/go.uuid"
 )
 
 func CreateMonument(c echo.Context) error {
@@ -36,5 +37,43 @@ func GetMonument(c echo.Context) error {
 	return c.JSON(http.StatusOK, map[string]interface{}{
 		"message": "success get all monument",
 		"data":    monument,
+	})
+}
+
+func GetMonumentById(c echo.Context) error {
+	id := c.Param("id")
+	mon, err := usecase.GetMonumentById(uuid.FromStringOrNil(id))
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
+	}
+	return c.JSON(http.StatusOK, map[string]interface{}{
+		"message": "success get monument by id",
+		"data":    mon,
+	})
+
+}
+
+func UpdateMonument(c echo.Context) error {
+	var mon payload.UpdateMonument
+	id := c.Param("id")
+	c.Bind(&mon)
+	if err := c.Validate(mon); err != nil {
+		return err
+	}
+	if err := usecase.UpdateMonument(uuid.FromStringOrNil(id), &mon); err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
+	}
+	return c.JSON(http.StatusOK, map[string]interface{}{
+		"message": "success update monument",
+	})
+}
+
+func DeleteMonument(c echo.Context) error {
+	id := c.Param("id")
+	if err := usecase.DeleteMonument(uuid.FromStringOrNil(id)); err != nil {
+		return c.JSON(http.StatusBadRequest, echo.NewHTTPError(http.StatusBadRequest, err.Error()))
+	}
+	return c.JSON(http.StatusOK, map[string]interface{}{
+		"message": "success delete monument",
 	})
 }

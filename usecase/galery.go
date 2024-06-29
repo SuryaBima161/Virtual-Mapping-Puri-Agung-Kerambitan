@@ -7,6 +7,8 @@ import (
 	"demonstrasi/util"
 	"fmt"
 	"mime/multipart"
+
+	uuid "github.com/satori/go.uuid"
 )
 
 func CreateGalery(req *payload.AddGalery, image *multipart.FileHeader) error {
@@ -54,4 +56,30 @@ func GetGaleryByRating() ([]payload.GetHomePageRespone, error) {
 	}
 
 	return resp, nil
+}
+
+func UpdateGalery(id uuid.UUID, req *payload.UpdateGalery) (err error) {
+	if _, err := database.GetGaleryById(id); err != nil {
+		return err
+	}
+	gal := models.TbGalery{
+		Image: req.Image,
+	}
+	if err := database.UpdateGalery(id, &gal); err != nil {
+		return err
+	}
+	return nil
+
+}
+
+func DeleteGalery(id uuid.UUID) (err error) {
+	if _, err := database.GetGaleryById(id); err != nil {
+		return err
+	}
+	err = database.DeleteGalery(id)
+	if err != nil {
+		fmt.Println("Delete: error deleting galery, err:", err)
+		return err
+	}
+	return nil
 }

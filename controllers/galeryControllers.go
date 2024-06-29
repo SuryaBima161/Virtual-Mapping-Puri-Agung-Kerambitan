@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	"github.com/labstack/echo/v4"
+	uuid "github.com/satori/go.uuid"
 )
 
 // func CreateGalery(c echo.Context) error {
@@ -75,5 +76,30 @@ func GetHomePage(c echo.Context) error {
 	return c.JSON(http.StatusOK, map[string]interface{}{
 		"message": "success get all galery",
 		"data":    galery,
+	})
+}
+
+func UpdateGalery(c echo.Context) error {
+	var inf payload.UpdateGalery
+	id := c.Param("id")
+	c.Bind(&inf)
+	if err := c.Validate(inf); err != nil {
+		return err
+	}
+	if err := usecase.UpdateGalery(uuid.FromStringOrNil(id), &inf); err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
+	}
+	return c.JSON(http.StatusOK, map[string]interface{}{
+		"message": "success update galery",
+	})
+}
+
+func DeleteGalery(c echo.Context) error {
+	id := c.Param("id")
+	if err := usecase.DeleteGalery(uuid.FromStringOrNil(id)); err != nil {
+		return c.JSON(http.StatusBadRequest, echo.NewHTTPError(http.StatusBadRequest, err.Error()))
+	}
+	return c.JSON(http.StatusOK, map[string]interface{}{
+		"message": "success delete galery",
 	})
 }

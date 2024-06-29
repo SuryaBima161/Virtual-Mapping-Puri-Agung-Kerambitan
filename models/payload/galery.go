@@ -6,6 +6,10 @@ type AddGalery struct {
 	InformationID uuid.UUID `json:"information_id" form:"information_id"`
 	Image         string    `json:"image" form:"image"`
 }
+
+type UpdateGalery struct {
+	Image string `json:"image" form:"image"`
+}
 type GetGaleryRespone struct {
 	Image string `json:"image" form:"image"`
 }
