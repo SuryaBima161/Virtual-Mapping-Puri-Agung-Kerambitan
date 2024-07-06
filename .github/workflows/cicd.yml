@@ -3,7 +3,7 @@ name: Deploy Go Application
 on:
   push:
     branches:
-      - deploy-to-ec2
+      - main
 
 jobs:
   build:
@@ -24,9 +24,8 @@ jobs:
       - name: Login to Docker Hub
         env:
           DOCKER_USERNAME: surya161
-          DOCKER_PASSWORD_FILE: ./cred.txt
         run: |
-          cat $DOCKER_PASSWORD_FILE | docker login -u $DOCKER_USERNAME --password-stdin
+          cat docker-credentials.txt | docker login --username $DOCKER_USERNAME --password-stdin
 
       - name: Build Docker image
         run: docker build -t surya161/puriagung .
