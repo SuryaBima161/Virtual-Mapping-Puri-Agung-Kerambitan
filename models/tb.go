@@ -37,6 +37,7 @@ type TbComment struct {
 	ReplyComment string    `json:"reply_comment" form:"reply_comment"`
 	TbGalery     TbGalery  `gorm:"foreignKey:Id_Galery" json:"tb_galery"`
 	Id_Galery    uuid.UUID `json:"id_galery" form:"id_galery"`
+	Status       string    `json:"status" form:"status"`
 }
 
 type TbGalery struct {
