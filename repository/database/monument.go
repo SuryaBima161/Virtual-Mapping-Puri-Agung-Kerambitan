@@ -46,7 +46,7 @@ func DeleteMonument(id uuid.UUID) error {
 func GetMonument() ([]models.TbMonument, error) {
 	var monument []models.TbMonument
 	db := config.DB
-	if err := db.Find(&monument).Error; err != nil {
+	if err := db.Preload("TbInformation").Find(&monument).Error; err != nil {
 		return monument, err
 	}
 	return monument, nil

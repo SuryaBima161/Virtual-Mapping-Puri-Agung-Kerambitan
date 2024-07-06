@@ -33,7 +33,10 @@ func GetMonument() (resp []payload.GetMonumentRespone, err error) {
 	resp = make([]payload.GetMonumentRespone, len(inf))
 	for i, data := range inf {
 		resp[i] = payload.GetMonumentRespone{
-			Image: data.Image,
+			JudulFoto:  data.TbInformation.JudulFoto,
+			NamaLokasi: data.TbInformation.NamaLokasi,
+			Deskripsi:  data.TbInformation.Deskripsi,
+			Image:      data.Image,
 		}
 	}
 

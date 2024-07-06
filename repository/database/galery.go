@@ -38,13 +38,19 @@ func DeleteGalery(id uuid.UUID) error {
 	return nil
 }
 
-func GetGalery() ([]models.TbGalery, error) {
-	var galery []models.TbGalery
-	db := config.DB
-	if err := db.Find(&galery).Error; err != nil {
-		return galery, err
+func GetGalery() ([]payload.GetGaleryRespone, error) {
+	var galeries []payload.GetGaleryRespone
+	query := `
+       SELECT g.id as id, g.image, COALESCE(AVG(c.rating), 0) as rating
+        FROM tb_galeries g
+        LEFT JOIN tb_comments c ON g.id = c.id_galery
+        GROUP BY g.id
+    `
+	err := config.DB.Raw(query).Scan(&galeries).Error
+	if err != nil {
+		return nil, fmt.Errorf("error querying galery: %v", err)
 	}
-	return galery, nil
+	return galeries, nil
 }
 
 func GetGaleryWithAvgRating() ([]payload.GaleryWithRating, error) {
