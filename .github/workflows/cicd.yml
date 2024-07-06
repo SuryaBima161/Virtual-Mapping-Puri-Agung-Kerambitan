@@ -14,12 +14,12 @@ jobs:
 
       - name: Create .env file
         run: |
-          echo "DB_USERNAME=root" > ../../.env
-          echo "DB_PASSWORD=password" >> ../../.env
-          echo "DB_PORT=4040" >> ../../.env
-          echo "DB_HOST=localhost" >> ../../.env
-          echo "DB_NAME=db_puri" >> ../../.env
-          echo "PORT=4040" >> ../../.env
+         echo "DB_USERNAME=root" >> .env
+          echo "DB_PASSWORD=password" >> .env
+          echo "DB_PORT=3306" >> .env
+          echo "DB_HOST=localhost" >> .env
+          echo "DB_NAME=db_puri" >> .env
+          echo "PORT=4040" >> .env
 
       - name: Login to Docker Hub
         env:
@@ -47,6 +47,4 @@ jobs:
         run: |
           docker run -d \
             -p 4040:4040 \
-            --name puriagung-container \
-            --env-file ../../.env \
-            surya161/puriagung:latest
+            --name puriagung-container surya161/puriagung:latest
