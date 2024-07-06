@@ -11,7 +11,7 @@ COPY . .
 
 RUN go build -o /docker-api
 
-EXPOSE 8000
+EXPOSE 4040
 
 CMD ["/docker-api"]
 
