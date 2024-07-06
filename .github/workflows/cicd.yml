@@ -22,7 +22,7 @@ jobs:
           echo "PORT=8080" >> .env
 
       - name: Login to Docker Hub
-        run: docker login -u surya161 -p your_docker_password
+        run: docker login -u surya161 -p surya9029.
 
       - name: Build Docker image
         run: docker build -t surya161/puriagung .
