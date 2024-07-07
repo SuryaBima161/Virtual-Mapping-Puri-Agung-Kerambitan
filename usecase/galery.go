@@ -92,20 +92,33 @@ func GetGaleryByRating() ([]payload.GetHomePageRespone, error) {
 	return resp, nil
 }
 
-func UpdateGalery(id uuid.UUID, req *payload.UpdateGalery) (err error) {
+func UpdateGalery(id uuid.UUID, req *payload.UpdateGalery, image *multipart.FileHeader) (err error) {
 	if _, err := database.GetGaleryById(id); err != nil {
 		return err
 	}
+
+	var imageUrl string
+	if image != nil {
+		result, err := util.UploadFileToCloudinary(image)
+		if err != nil {
+			return err
+		}
+		imageUrl = result
+	} else {
+		existingGalery, err := database.GetGaleryById(id)
+		if err != nil {
+			return err
+		}
+		imageUrl = existingGalery.Image
+	}
 	gal := models.TbGalery{
-		Image: req.Image,
+		Image: imageUrl,
 	}
 	if err := database.UpdateGalery(id, &gal); err != nil {
 		return err
 	}
 	return nil
-
 }
-
 func DeleteGalery(id uuid.UUID) (err error) {
 	if _, err := database.GetGaleryById(id); err != nil {
 		return err

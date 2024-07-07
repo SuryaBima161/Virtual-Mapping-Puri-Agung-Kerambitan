@@ -12,17 +12,20 @@ import (
 )
 
 func CreateMonument(req *payload.MonumentRequest, image *multipart.FileHeader) error {
-	result, err := util.UploadFile(image)
+	result, err := util.UploadFileToCloudinary(image)
 	if err != nil {
 		return err
 	}
-	galery := models.TbMonument{
+
+	mon := models.TbMonument{
 		Id_Information: req.InformationID,
 		Image:          result,
 	}
-	if err := database.CreateMonument(&galery); err != nil {
+
+	if err := database.CreateMonument(&mon); err != nil {
 		return err
 	}
+
 	return nil
 }
 func GetMonument() (resp []payload.GetMonumentRespone, err error) {
@@ -59,18 +62,32 @@ func GetMonumentById(id uuid.UUID) (payload.GetMonumentRespone, error) {
 	return resp, nil
 }
 
-func UpdateMonument(id uuid.UUID, req *payload.UpdateMonument) (err error) {
+func UpdateMonument(id uuid.UUID, req *payload.UpdateMonument, image *multipart.FileHeader) (err error) {
 	if _, err := database.GetMonumentById(id); err != nil {
 		return err
 	}
-	mon := models.TbMonument{
-		Image: req.Image,
+
+	var imageUrl string
+	if image != nil {
+		result, err := util.UploadFileToCloudinary(image)
+		if err != nil {
+			return err
+		}
+		imageUrl = result
+	} else {
+		existingGalery, err := database.GetMonumentById(id)
+		if err != nil {
+			return err
+		}
+		imageUrl = existingGalery.Image
 	}
-	if err := database.UpdateMonument(id, &mon); err != nil {
+	gal := models.TbMonument{
+		Image: imageUrl,
+	}
+	if err := database.UpdateMonument(id, &gal); err != nil {
 		return err
 	}
 	return nil
-
 }
 
 func DeleteMonument(id uuid.UUID) (err error) {

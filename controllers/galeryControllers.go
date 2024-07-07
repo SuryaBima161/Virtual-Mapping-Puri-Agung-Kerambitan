@@ -80,15 +80,26 @@ func GetHomePage(c echo.Context) error {
 }
 
 func UpdateGalery(c echo.Context) error {
+	// Bind the payload
 	var inf payload.UpdateGalery
 	id := c.Param("id")
-	c.Bind(&inf)
+	if err := c.Bind(&inf); err != nil {
+		return err
+	}
 	if err := c.Validate(inf); err != nil {
 		return err
 	}
-	if err := usecase.UpdateGalery(uuid.FromStringOrNil(id), &inf); err != nil {
+
+	image, err := c.FormFile("image")
+	if err != nil && err != http.ErrMissingFile {
+		return echo.NewHTTPError(http.StatusBadRequest, "Failed to read image file: "+err.Error())
+	}
+
+	if err := usecase.UpdateGalery(uuid.FromStringOrNil(id), &inf, image); err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
+
+	// Return success response
 	return c.JSON(http.StatusOK, map[string]interface{}{
 		"message": "success update galery",
 	})
