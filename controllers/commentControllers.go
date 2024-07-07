@@ -34,15 +34,15 @@ func DeleteComment(c echo.Context) error {
 }
 
 func GetComment(c echo.Context) error {
-	var comment []payload.GetCommentRespone
-	comment, err := usecase.GetComment()
+	status := "validated"
+	comments, err := usecase.GetComment(status)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
 
 	return c.JSON(http.StatusOK, map[string]interface{}{
-		"message": "success get all comments",
-		"data":    comment,
+		"message": "success get all validated comments",
+		"data":    comments,
 	})
 }
 
@@ -81,7 +81,7 @@ func ValideteComment(c echo.Context) error {
 	if err := c.Validate(inf); err != nil {
 		return err
 	}
-	if err := usecase.ValideteComment(uuid.FromStringOrNil(id), &inf); err != nil {
+	if err := usecase.ValidateComment(uuid.FromStringOrNil(id), &inf); err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
 	return c.JSON(http.StatusOK, map[string]interface{}{

@@ -14,13 +14,18 @@ func CreateComment(req *models.TbComment) error {
 	return nil
 }
 
-func GetComment() ([]models.TbComment, error) {
-	var comment []models.TbComment
+func GetComment(status string) ([]models.TbComment, error) {
+	var comments []models.TbComment
 	db := config.DB
-	if err := db.Find(&comment).Error; err != nil {
-		return comment, err
+	if status != "" {
+		db = db.Where("status = ?", status)
 	}
-	return comment, nil
+
+	if err := db.Find(&comments).Error; err != nil {
+		return comments, err
+	}
+
+	return comments, nil
 }
 
 func GetCommentById(id uuid.UUID) (resp models.TbComment, err error) {

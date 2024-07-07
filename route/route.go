@@ -25,6 +25,7 @@ func New() *echo.Echo {
 	e.GET("/homepage", controllers.GetHomePage)
 	e.GET("/galery", controllers.GetGalery)
 	e.GET("/monument", controllers.GetMonument)
+	e.GET("/commented", controllers.GetComment)
 
 	admin := e.Group("/admin", jwt.JWT([]byte(constants.SECRET_KEY)))
 

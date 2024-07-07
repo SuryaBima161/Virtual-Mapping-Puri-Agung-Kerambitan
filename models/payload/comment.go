@@ -9,8 +9,10 @@ type AddComment struct {
 	Rating    float64   `json:"rating" form:"rating"`
 }
 type GetCommentRespone struct {
-	Name    string `json:"name" form:"name"`
-	Comment string `json:"comment" form:"comment"`
+	Name    string  `json:"name" form:"name"`
+	Comment string  `json:"comment" form:"comment"`
+	Rating  float64 `json:"rating"`
+	Reply   string  `json:"reply"`
 }
 
 type ReplyCommentRequest struct {
