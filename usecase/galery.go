@@ -37,9 +37,11 @@ func GetGalery() (resp []payload.GetGaleryRespone, err error) {
 	resp = make([]payload.GetGaleryRespone, len(inf))
 	for i, data := range inf {
 		resp[i] = payload.GetGaleryRespone{
-			Image:     data.Image,
-			Rating:    data.Rating,
-			Deskripsi: data.Deskripsi,
+			Image:      data.Image,
+			Rating:     data.Rating,
+			JudulFoto:  data.JudulFoto,
+			NamaLokasi: data.NamaLokasi,
+			Deskripsi:  data.Deskripsi,
 		}
 	}
 
