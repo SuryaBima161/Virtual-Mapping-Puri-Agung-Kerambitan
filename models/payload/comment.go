@@ -16,3 +16,7 @@ type GetCommentRespone struct {
 type ReplyCommentRequest struct {
 	ReplyComment string `json:"reply_comment" form:"reply_comment"`
 }
+
+type ValidateComment struct {
+	Status string `json:"status" form:"status"`
+}

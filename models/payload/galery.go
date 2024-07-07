@@ -11,8 +11,9 @@ type UpdateGalery struct {
 	Image string `json:"image" form:"image"`
 }
 type GetGaleryRespone struct {
-	Image  string  `json:"image" form:"image"`
-	Rating float64 `json:"rating" form:"rating"`
+	Image     string  `json:"image" form:"image"`
+	Rating    float64 `json:"rating" form:"rating"`
+	Deskripsi string  `json:"deskripsi" form:"deskripsi"`
 }
 
 type GaleryWithRating struct {

@@ -73,3 +73,18 @@ func UpdateReplyComment(c echo.Context) error {
 		"message": "success reply comment",
 	})
 }
+
+func ValideteComment(c echo.Context) error {
+	var inf payload.ValidateComment
+	id := c.Param("id")
+	c.Bind(&inf)
+	if err := c.Validate(inf); err != nil {
+		return err
+	}
+	if err := usecase.ValideteComment(uuid.FromStringOrNil(id), &inf); err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
+	}
+	return c.JSON(http.StatusOK, map[string]interface{}{
+		"message": "success update status",
+	})
+}

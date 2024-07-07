@@ -47,6 +47,7 @@ func New() *echo.Echo {
 	commentAdmin.GET("", controllers.GetComment)
 	commentAdmin.POST("", controllers.CreateComment)
 	commentAdmin.PUT("/:id", controllers.UpdateReplyComment)
+	commentAdmin.PUT("/:id", controllers.ValideteComment)
 
 	galeryAdmin := admin.Group("/galery")
 	galeryAdmin.POST("", controllers.CreateGalery)

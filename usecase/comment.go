@@ -75,3 +75,17 @@ func UpdateReplyComment(id uuid.UUID, req *payload.ReplyCommentRequest) (err err
 	return nil
 
 }
+
+func ValideteComment(id uuid.UUID, req *payload.ValidateComment) (err error) {
+	if _, err := database.GetCommentById(id); err != nil {
+		return err
+	}
+	inf := models.TbComment{
+		Status: req.Status,
+	}
+	if err := database.ValidateComment(id, &inf); err != nil {
+		return err
+	}
+	return nil
+
+}

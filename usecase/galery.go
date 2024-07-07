@@ -25,6 +25,7 @@ func CreateGalery(req *payload.AddGalery, image *multipart.FileHeader) error {
 	}
 	return nil
 }
+
 func GetGalery() (resp []payload.GetGaleryRespone, err error) {
 	inf, err := database.GetGalery()
 	if err != nil {
@@ -33,8 +34,9 @@ func GetGalery() (resp []payload.GetGaleryRespone, err error) {
 	resp = make([]payload.GetGaleryRespone, len(inf))
 	for i, data := range inf {
 		resp[i] = payload.GetGaleryRespone{
-			Image:  data.Image,
-			Rating: data.Rating,
+			Image:     data.Image,
+			Rating:    data.Rating,
+			Deskripsi: data.Deskripsi,
 		}
 	}
 
