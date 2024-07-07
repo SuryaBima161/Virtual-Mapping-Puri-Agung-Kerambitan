@@ -1,6 +1,7 @@
 package usecase
 
 import (
+	"demonstrasi/config"
 	"demonstrasi/models"
 	"demonstrasi/models/payload"
 	"demonstrasi/repository/database"
@@ -29,23 +30,48 @@ func CreateGalery(req *payload.AddGalery, image *multipart.FileHeader) error {
 	return nil
 }
 
-func GetGalery() (resp []payload.GetGaleryRespone, err error) {
-	inf, err := database.GetGalery()
-	if err != nil {
-		return []payload.GetGaleryRespone{}, err
-	}
-	resp = make([]payload.GetGaleryRespone, len(inf))
-	for i, data := range inf {
-		resp[i] = payload.GetGaleryRespone{
-			Image:      data.Image,
-			Rating:     data.Rating,
-			JudulFoto:  data.JudulFoto,
-			NamaLokasi: data.NamaLokasi,
-			Deskripsi:  data.Deskripsi,
-		}
+func GetGalery() ([]payload.GetGaleryRespone, error) {
+	var galeries []struct {
+		ID            string  `gorm:"column:id"`
+		IDInformation string  `gorm:"column:id_information"`
+		Image         string  `gorm:"column:image"`
+		Rating        float64 `gorm:"column:rating"`
+		JudulFoto     string  `gorm:"column:judul_foto"`
+		NamaLokasi    string  `gorm:"column:nama_lokasi"`
+		Deskripsi     string  `gorm:"column:deskripsi"`
 	}
 
-	return resp, nil
+	query := `
+       SELECT g.id, g.id_information, g.image, COALESCE(AVG(c.rating), 0) as rating,
+               i.id_login, i.judul_foto, i.nama_lokasi, i.deskripsi
+        FROM tb_galeries g
+        LEFT JOIN tb_comments c ON g.id = c.id_galery
+        LEFT JOIN tb_informations i ON g.id_information = i.id
+        GROUP BY g.id, g.id_information, i.id_login, i.judul_foto, i.nama_lokasi, i.deskripsi
+    `
+	err := config.DB.Raw(query).Scan(&galeries).Error
+	if err != nil {
+		return nil, fmt.Errorf("error querying galery: %v", err)
+	}
+
+	var responses []payload.GetGaleryRespone
+	for _, galery := range galeries {
+		info := payload.GetInformationForGallery{
+			ID:         galery.ID,
+			JudulFoto:  galery.JudulFoto,
+			NamaLokasi: galery.NamaLokasi,
+			Deskripsi:  galery.Deskripsi,
+		}
+
+		response := payload.GetGaleryRespone{
+			Image:                   galery.Image,
+			Rating:                  galery.Rating,
+			GetInformationForGalery: info,
+		}
+		responses = append(responses, response)
+	}
+
+	return responses, nil
 }
 
 func GetGaleryByRating() ([]payload.GetHomePageRespone, error) {
