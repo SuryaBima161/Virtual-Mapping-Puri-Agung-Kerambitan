@@ -12,17 +12,20 @@ import (
 )
 
 func CreateGalery(req *payload.AddGalery, image *multipart.FileHeader) error {
-	result, err := util.UploadFile(image)
+	result, err := util.UploadFileToCloudinary(image)
 	if err != nil {
 		return err
 	}
+
 	galery := models.TbGalery{
 		Id_Information: req.InformationID,
 		Image:          result,
 	}
+
 	if err := database.CreateGalery(&galery); err != nil {
 		return err
 	}
+
 	return nil
 }
 
