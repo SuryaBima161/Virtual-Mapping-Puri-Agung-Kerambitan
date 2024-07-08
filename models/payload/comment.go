@@ -13,6 +13,13 @@ type GetCommentRespone struct {
 	Comment string  `json:"comment" form:"comment"`
 	Rating  float64 `json:"rating"`
 	Reply   string  `json:"reply"`
+	Status  string  `json:"status"`
+}
+type GetCommentValidateRespone struct {
+	Name    string  `json:"name" form:"name"`
+	Comment string  `json:"comment" form:"comment"`
+	Rating  float64 `json:"rating"`
+	Reply   string  `json:"reply"`
 }
 
 type ReplyCommentRequest struct {

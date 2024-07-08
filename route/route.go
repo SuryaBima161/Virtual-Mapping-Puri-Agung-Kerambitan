@@ -19,14 +19,15 @@ func New() *echo.Echo {
 
 	e.Pre(middleware.RemoveTrailingSlash())
 	e.Use(middleware.CORS())
+	//ga perlu login
 	e.POST("/register", controllers.RegisterController)
 	e.POST("/login", controllers.LoginController)
 	e.POST("/comment", controllers.CreateComment)
 	e.GET("/homepage", controllers.GetHomePage)
 	e.GET("/galery", controllers.GetGalery)
 	e.GET("/monument", controllers.GetMonument)
-	e.GET("/commented", controllers.GetComment)
-
+	e.GET("/comment", controllers.GetCommentValidated)
+	//---
 	admin := e.Group("/admin", jwt.JWT([]byte(constants.SECRET_KEY)))
 
 	inf := admin.Group("/information")

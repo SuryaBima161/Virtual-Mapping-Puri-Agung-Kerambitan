@@ -33,15 +33,27 @@ func DeleteComment(c echo.Context) error {
 	})
 }
 
-func GetComment(c echo.Context) error {
+func GetCommentValidated(c echo.Context) error {
 	status := "validated"
-	comments, err := usecase.GetComment(status)
+	comments, err := usecase.GetCommentValidated(status)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
 
 	return c.JSON(http.StatusOK, map[string]interface{}{
 		"message": "success get all validated comments",
+		"data":    comments,
+	})
+}
+
+func GetComment(c echo.Context) error {
+	comments, err := usecase.GetComment()
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
+	}
+
+	return c.JSON(http.StatusOK, map[string]interface{}{
+		"message": "success get all comments",
 		"data":    comments,
 	})
 }

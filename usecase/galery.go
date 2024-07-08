@@ -17,7 +17,6 @@ func CreateGalery(req *payload.AddGalery, image *multipart.FileHeader) error {
 	if err != nil {
 		return err
 	}
-
 	galery := models.TbGalery{
 		Id_Information: req.InformationID,
 		Image:          result,
@@ -26,14 +25,13 @@ func CreateGalery(req *payload.AddGalery, image *multipart.FileHeader) error {
 	if err := database.CreateGalery(&galery); err != nil {
 		return err
 	}
-
 	return nil
 }
 
 func GetGalery() ([]payload.GetGaleryRespone, error) {
 	var galeries []struct {
-		ID            string  `gorm:"column:id"`
-		IDInformation string  `gorm:"column:id_information"`
+		ID            string  `gorm:"column:id" json:"id_galery"`
+		IDInformation string  `gorm:"column:id_information" json:"id_information"`
 		Image         string  `gorm:"column:image"`
 		Rating        float64 `gorm:"column:rating"`
 		JudulFoto     string  `gorm:"column:judul_foto"`
@@ -57,13 +55,14 @@ func GetGalery() ([]payload.GetGaleryRespone, error) {
 	var responses []payload.GetGaleryRespone
 	for _, galery := range galeries {
 		info := payload.GetInformationForGallery{
-			ID:         galery.ID,
+			ID:         galery.IDInformation,
 			JudulFoto:  galery.JudulFoto,
 			NamaLokasi: galery.NamaLokasi,
 			Deskripsi:  galery.Deskripsi,
 		}
 
 		response := payload.GetGaleryRespone{
+			Id_galery:               galery.ID,
 			Image:                   galery.Image,
 			Rating:                  galery.Rating,
 			GetInformationForGalery: info,

@@ -22,8 +22,27 @@ func CreateComment(req *payload.AddComment) error {
 	return nil
 }
 
-func GetComment(status string) ([]payload.GetCommentRespone, error) {
-	comments, err := database.GetComment(status)
+func GetCommentValidated(status string) ([]payload.GetCommentValidateRespone, error) {
+	comments, err := database.GetCommentValidated(status)
+	if err != nil {
+		return nil, err
+	}
+
+	var responses []payload.GetCommentValidateRespone
+	for _, data := range comments {
+		responses = append(responses, payload.GetCommentValidateRespone{
+			Name:    data.Name,
+			Comment: data.Comment,
+			Rating:  data.Rating,
+			Reply:   data.ReplyComment,
+		})
+	}
+
+	return responses, nil
+}
+
+func GetComment() ([]payload.GetCommentRespone, error) {
+	comments, err := database.GetComment()
 	if err != nil {
 		return nil, err
 	}
@@ -35,6 +54,7 @@ func GetComment(status string) ([]payload.GetCommentRespone, error) {
 			Comment: data.Comment,
 			Rating:  data.Rating,
 			Reply:   data.ReplyComment,
+			Status:  data.Status,
 		})
 	}
 

@@ -14,7 +14,7 @@ func CreateComment(req *models.TbComment) error {
 	return nil
 }
 
-func GetComment(status string) ([]models.TbComment, error) {
+func GetCommentValidated(status string) ([]models.TbComment, error) {
 	var comments []models.TbComment
 	db := config.DB
 	if status != "" {
@@ -23,6 +23,15 @@ func GetComment(status string) ([]models.TbComment, error) {
 
 	if err := db.Find(&comments).Error; err != nil {
 		return comments, err
+	}
+
+	return comments, nil
+}
+func GetComment() ([]models.TbComment, error) {
+	var comments []models.TbComment
+	db := config.DB
+	if err := db.Find(&comments).Error; err != nil {
+		return nil, err
 	}
 
 	return comments, nil
