@@ -48,7 +48,7 @@ func GetInformation() (resp []payload.GetInformationRespone, err error) {
 		resp[i] = payload.GetInformationRespone{
 			Id_Information: data.ID,
 			JudulFoto:      data.JudulFoto,
-			NamaLokasi:     data.JudulFoto,
+			NamaLokasi:     data.NamaLokasi,
 			Deskripsi:      data.Deskripsi,
 		}
 	}
@@ -62,8 +62,8 @@ func GetInformationById(id uuid.UUID) (resp payload.GetInformationRespone, err e
 		return payload.GetInformationRespone{}, err
 	}
 	resp = payload.GetInformationRespone{
-		NamaLokasi: inf.NamaLokasi,
 		JudulFoto:  inf.JudulFoto,
+		NamaLokasi: inf.NamaLokasi,
 		Deskripsi:  inf.Deskripsi,
 	}
 	return

@@ -73,7 +73,7 @@ func UpdateMonument(c echo.Context) error {
 	}
 
 	return c.JSON(http.StatusOK, map[string]interface{}{
-		"message": "success update galery",
+		"message": "success update monument",
 	})
 }
 func DeleteMonument(c echo.Context) error {
