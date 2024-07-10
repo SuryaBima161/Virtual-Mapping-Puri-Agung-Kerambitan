@@ -50,11 +50,13 @@ func GetComment() ([]payload.GetCommentRespone, error) {
 	var responses []payload.GetCommentRespone
 	for _, data := range comments {
 		responses = append(responses, payload.GetCommentRespone{
-			Name:    data.Name,
-			Comment: data.Comment,
-			Rating:  data.Rating,
-			Reply:   data.ReplyComment,
-			Status:  data.Status,
+			ID:        data.ID,
+			Id_Galery: data.Id_Galery,
+			Name:      data.Name,
+			Comment:   data.Comment,
+			Rating:    data.Rating,
+			Reply:     data.ReplyComment,
+			Status:    data.Status,
 		})
 	}
 

@@ -9,17 +9,21 @@ type AddComment struct {
 	Rating    float64   `json:"rating" form:"rating"`
 }
 type GetCommentRespone struct {
-	Name    string  `json:"name" form:"name"`
-	Comment string  `json:"comment" form:"comment"`
-	Rating  float64 `json:"rating"`
-	Reply   string  `json:"reply"`
-	Status  string  `json:"status"`
+	ID        uuid.UUID `json:"id" form:"id"`
+	Id_Galery uuid.UUID `json:"idgalery"`
+	Name      string    `json:"name" form:"name"`
+	Comment   string    `json:"comment" form:"comment"`
+	Rating    float64   `json:"rating"`
+	Reply     string    `json:"reply"`
+	Status    string    `json:"status"`
 }
 type GetCommentValidateRespone struct {
-	Name    string  `json:"name" form:"name"`
-	Comment string  `json:"comment" form:"comment"`
-	Rating  float64 `json:"rating"`
-	Reply   string  `json:"reply"`
+	ID        uuid.UUID `json:"id" form:"id"`
+	Id_Galery uuid.UUID `json:"idgalery"`
+	Name      string    `json:"name" form:"name"`
+	Comment   string    `json:"comment" form:"comment"`
+	Rating    float64   `json:"rating"`
+	Reply     string    `json:"reply"`
 }
 
 type ReplyCommentRequest struct {
