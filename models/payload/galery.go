@@ -17,6 +17,13 @@ type GetGaleryRespone struct {
 	Rating                  float64                  `json:"rating" form:"rating"`
 	GetInformationForGalery GetInformationForGallery `json:"information" form:"information"`
 }
+type GetGaleryMonumentRespone struct {
+	Id_galery               string                   `json:"id_galery" form:"id_galery"`
+	Id_monument             string                   `json:"id_monument" form:"id_monument"`
+	Image                   string                   `json:"image" form:"image"`
+	Rating                  float64                  `json:"rating" form:"rating"`
+	GetInformationForGalery GetInformationForGallery `json:"information" form:"information"`
+}
 
 type GetInformationForGallery struct {
 	ID         string `json:"id_information" form:"id_information"`
