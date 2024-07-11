@@ -2,32 +2,32 @@ package route
 
 import (
 	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 
 	"demonstrasi/constants"
 	"demonstrasi/controllers"
 	m "demonstrasi/middlewares"
 
 	jwt "github.com/labstack/echo-jwt/v4"
-
-	"github.com/labstack/echo/v4/middleware"
 )
 
 func New() *echo.Echo {
 	e := echo.New()
 
 	m.LoggerMiddleware(e)
+	e.Use(middleware.Recover())
 
-	e.Pre(middleware.RemoveTrailingSlash())
-	e.Use(middleware.CORS())
+	// CORS middleware
 	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
 		AllowOrigins: []string{
-			"http://localhost:3000",
-			"https://v57q9chz-3000.asse.devtunnels.ms",
-			// Tambahkan URL forward port lainnya jika ada
+			"http://localhost:3000",                     // Ganti dengan origin frontend Anda
+			"https://v8ftmpnc-3000.asse.devtunnels.ms/", // Contoh: URL publik yang diizinkan
 		},
 		AllowMethods: []string{echo.GET, echo.POST, echo.PUT, echo.DELETE},
 		AllowHeaders: []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept, echo.HeaderAuthorization},
 	}))
+
+	e.Pre(middleware.RemoveTrailingSlash())
 	//ga perlu login
 	e.POST("/register", controllers.RegisterController)
 	e.POST("/login", controllers.LoginController)

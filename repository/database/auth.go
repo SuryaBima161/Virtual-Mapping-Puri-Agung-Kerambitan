@@ -6,7 +6,7 @@ import (
 )
 
 func Login(username string) (user models.TbLogin, err error) {
-	if err := config.DB.Where("name = ?", username).First(&user).Error; err != nil {
+	if err := config.DB.Where("username = ?", username).First(&user).Error; err != nil {
 		return models.TbLogin{}, err
 	}
 	return
