@@ -19,6 +19,15 @@ func New() *echo.Echo {
 
 	e.Pre(middleware.RemoveTrailingSlash())
 	e.Use(middleware.CORS())
+	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
+		AllowOrigins: []string{
+			"http://localhost:3000",
+			"https://v57q9chz-3000.asse.devtunnels.ms",
+			// Tambahkan URL forward port lainnya jika ada
+		},
+		AllowMethods: []string{echo.GET, echo.POST, echo.PUT, echo.DELETE},
+		AllowHeaders: []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept, echo.HeaderAuthorization},
+	}))
 	//ga perlu login
 	e.POST("/register", controllers.RegisterController)
 	e.POST("/login", controllers.LoginController)
