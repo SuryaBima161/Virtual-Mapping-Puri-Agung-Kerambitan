@@ -49,15 +49,23 @@ func GetComment() ([]payload.GetCommentRespone, error) {
 
 	var responses []payload.GetCommentRespone
 	for _, data := range comments {
-		responses = append(responses, payload.GetCommentRespone{
-			ID:        data.ID,
-			Id_Galery: data.Id_Galery,
-			Name:      data.Name,
-			Comment:   data.Comment,
-			Rating:    data.Rating,
-			Reply:     data.ReplyComment,
-			Status:    data.Status,
-		})
+		galleryResponse := payload.GetGaleryForCommentRespone{
+			Id_Galery:   data.TbGalery.ID,
+			Judul_foto:  data.TbGalery.TbInformation.JudulFoto,
+			Nama_lokasi: data.TbGalery.TbInformation.NamaLokasi,
+		}
+
+		commentResponse := payload.GetCommentRespone{
+			ID:                         data.ID,
+			Name:                       data.Name,
+			Comment:                    data.Comment,
+			Rating:                     data.Rating,
+			Reply:                      data.ReplyComment,
+			Status:                     data.Status,
+			GetGaleryForCommentRespone: galleryResponse,
+		}
+
+		responses = append(responses, commentResponse)
 	}
 
 	return responses, nil

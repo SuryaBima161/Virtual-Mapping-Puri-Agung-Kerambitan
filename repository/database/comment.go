@@ -30,7 +30,7 @@ func GetCommentValidated(status string) ([]models.TbComment, error) {
 func GetComment() ([]models.TbComment, error) {
 	var comments []models.TbComment
 	db := config.DB
-	if err := db.Find(&comments).Error; err != nil {
+	if err := db.Preload("TbGalery.TbInformation").Find(&comments).Error; err != nil {
 		return nil, err
 	}
 
