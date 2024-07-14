@@ -40,13 +40,14 @@ func GetGalery() ([]payload.GetGaleryRespone, error) {
 	}
 
 	query := `
-       SELECT g.id, g.id_information, g.image, COALESCE(AVG(c.rating), 0) as rating,
-               i.id_login, i.judul_foto, i.nama_lokasi, i.deskripsi
-        FROM tb_galeries g
-        LEFT JOIN tb_comments c ON g.id = c.id_galery
-        LEFT JOIN tb_informations i ON g.id_information = i.id
-        GROUP BY g.id, g.id_information, i.id_login, i.judul_foto, i.nama_lokasi, i.deskripsi
-    `
+	SELECT g.id, g.id_information, g.image, COALESCE(AVG(c.rating), 0) as rating,
+		   i.id_login, i.judul_foto, i.nama_lokasi, i.deskripsi
+	 FROM tb_galeries g
+	 LEFT JOIN tb_comments c ON g.id = c.id_galery
+	 LEFT JOIN tb_informations i ON g.id_information = i.id
+	 WHERE g.deleted_at IS NULL AND i.deleted_at IS NULL
+	 GROUP BY g.id, g.id_information, i.id_login, i.judul_foto, i.nama_lokasi, i.deskripsi
+ `
 	err := config.DB.Raw(query).Scan(&galeries).Error
 	if err != nil {
 		return nil, fmt.Errorf("error querying galery: %v", err)
