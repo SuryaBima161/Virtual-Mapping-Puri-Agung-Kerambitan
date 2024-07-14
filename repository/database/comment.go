@@ -44,6 +44,14 @@ func GetCommentById(id uuid.UUID) (resp models.TbComment, err error) {
 	return
 }
 
+func GetCommentByIdGalery(id uuid.UUID) (resp []models.TbComment, err error) {
+	if err := config.DB.Preload("TbGalery.TbInformation").Where("id_galery = ?", id).Find(&resp).Error; err != nil {
+
+		return resp, err
+	}
+	return
+}
+
 func DeleteComment(id uuid.UUID) error {
 	inf := models.TbComment{}
 	if err := config.DB.Model(&inf).Where("id = ?", id).Delete(&inf).Error; err != nil {

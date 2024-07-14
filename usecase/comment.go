@@ -83,6 +83,36 @@ func GetCommentById(id uuid.UUID) (resp payload.GetCommentRespone, err error) {
 	return
 }
 
+func GetCommentByGalleryID(galleryID uuid.UUID) ([]payload.GetCommentRespone, error) {
+	comments, err := database.GetCommentByIdGalery(galleryID)
+	if err != nil {
+		return nil, err
+	}
+
+	var responses []payload.GetCommentRespone
+	for _, data := range comments {
+		galleryResponse := payload.GetGaleryForCommentRespone{
+			Id_Galery:   data.TbGalery.ID,
+			Judul_foto:  data.TbGalery.TbInformation.JudulFoto,
+			Nama_lokasi: data.TbGalery.TbInformation.NamaLokasi,
+		}
+
+		commentResponse := payload.GetCommentRespone{
+			ID:                         data.ID,
+			Name:                       data.Name,
+			Comment:                    data.Comment,
+			Rating:                     data.Rating,
+			Reply:                      data.ReplyComment,
+			Status:                     data.Status,
+			GetGaleryForCommentRespone: galleryResponse,
+		}
+
+		responses = append(responses, commentResponse)
+	}
+
+	return responses, nil
+}
+
 func DeleteComment(id uuid.UUID) (err error) {
 	if _, err := database.GetCommentById(id); err != nil {
 		return err
@@ -110,15 +140,26 @@ func UpdateReplyComment(id uuid.UUID, req *payload.ReplyCommentRequest) (err err
 }
 
 func ValidateComment(id uuid.UUID, req *payload.ValidateComment) error {
-	comment, err := database.GetCommentById(id)
-	if err != nil {
-		return fmt.Errorf("failed to retrieve comment: %v", err)
-	}
-	comment.Status = "validated"
+	// comment, err := database.GetCommentById(id)
+	// if err != nil {
+	// 	return fmt.Errorf("failed to retrieve comment: %v", err)
+	// }
+	// comment.Status = "validated"
 
-	if err := database.ValidateComment(id, &comment); err != nil {
-		return fmt.Errorf("failed to validate comment: %v", err)
-	}
+	// if err := database.ValidateComment(id, &comment); err != nil {
+	// 	return fmt.Errorf("failed to validate comment: %v", err)
+	// }
 
+	// return nil
+
+	if _, err := database.GetCommentById(id); err != nil {
+		return err
+	}
+	inf := models.TbComment{
+		Status: "validated",
+	}
+	if err := database.ValidateComment(id, &inf); err != nil {
+		return err
+	}
 	return nil
 }

@@ -71,6 +71,19 @@ func GetCommentById(c echo.Context) error {
 
 }
 
+func GetCommentByIdGalery(c echo.Context) error {
+	id := c.Param("id")
+	comment, err := usecase.GetCommentByGalleryID(uuid.FromStringOrNil(id))
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
+	}
+	return c.JSON(http.StatusOK, map[string]interface{}{
+		"message": "success get comment by id galery",
+		"data":    comment,
+	})
+
+}
+
 func UpdateReplyComment(c echo.Context) error {
 	var inf payload.ReplyCommentRequest
 	id := c.Param("id")
@@ -86,7 +99,7 @@ func UpdateReplyComment(c echo.Context) error {
 	})
 }
 
-func ValideteComment(c echo.Context) error {
+func ValidateComment(c echo.Context) error {
 	var inf payload.ValidateComment
 	id := c.Param("id")
 	c.Bind(&inf)
@@ -97,6 +110,6 @@ func ValideteComment(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
 	return c.JSON(http.StatusOK, map[string]interface{}{
-		"message": "success update status",
+		"message": "success validate comment",
 	})
 }

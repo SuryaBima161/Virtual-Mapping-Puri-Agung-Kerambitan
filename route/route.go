@@ -20,8 +20,9 @@ func New() *echo.Echo {
 	// CORS middleware
 	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
 		AllowOrigins: []string{
-			"http://localhost:3000",                     // Ganti dengan origin frontend Anda
-			"https://v8ftmpnc-3000.asse.devtunnels.ms/", // Contoh: URL publik yang diizinkan
+			"http://localhost:3000", // Ganti dengan origin frontend Anda
+			"http://v8ftmpnc-3000.asse.devtunnels.ms",
+			"https://v57q9chz-3000.asse.devtunnels.ms", // Contoh: URL publik yang diizinkan
 		},
 		AllowMethods: []string{echo.GET, echo.POST, echo.PUT, echo.DELETE},
 		AllowHeaders: []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept, echo.HeaderAuthorization},
@@ -58,11 +59,12 @@ func New() *echo.Echo {
 	commentAdmin.GET("", controllers.GetComment)
 	commentAdmin.POST("", controllers.CreateComment)
 	commentAdmin.PUT("/:id", controllers.UpdateReplyComment)
-	commentAdmin.PUT("validate/:id", controllers.ValideteComment)
+	commentAdmin.PUT("/validate/:id", controllers.ValidateComment)
 
 	galeryAdmin := admin.Group("/galery")
 	galeryAdmin.POST("", controllers.CreateGalery)
 	galeryAdmin.GET("", controllers.GetGalery)
+	galeryAdmin.GET("/:id", controllers.GetCommentByIdGalery)
 	galeryAdmin.DELETE("/:id", controllers.DeleteGalery)
 	galeryAdmin.PUT("/:id", controllers.UpdateGalery)
 
