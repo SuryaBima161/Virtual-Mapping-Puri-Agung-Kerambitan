@@ -140,17 +140,6 @@ func UpdateReplyComment(id uuid.UUID, req *payload.ReplyCommentRequest) (err err
 }
 
 func ValidateComment(id uuid.UUID, req *payload.ValidateComment) error {
-	// comment, err := database.GetCommentById(id)
-	// if err != nil {
-	// 	return fmt.Errorf("failed to retrieve comment: %v", err)
-	// }
-	// comment.Status = "validated"
-
-	// if err := database.ValidateComment(id, &comment); err != nil {
-	// 	return fmt.Errorf("failed to validate comment: %v", err)
-	// }
-
-	// return nil
 
 	if _, err := database.GetCommentById(id); err != nil {
 		return err

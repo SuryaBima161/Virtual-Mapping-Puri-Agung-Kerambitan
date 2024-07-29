@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Comment with Captcha</title>
+</head>
+<body>
+    <form action="/user/comment" method="POST">
+        <!-- ID Galery (hidden field) -->
+         <!-- Name -->
+        <label for="name">Id galery :</label>
+        <input type="text" id="id" name="id" value="{{.IdGalery}}"><br><br>
+
+        <!-- Name -->
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name"><br><br>
+
+        <!-- Comment -->
+        <label for="comment">Comment:</label>
+        <textarea id="comment" name="comment"></textarea><br><br>
+
+        <!-- Rating -->
+        <label for="rating">Rating:</label>
+        <input type="number" step="0.1" id="rating" name="rating"><br><br>
+
+        <!-- Captcha -->
+        <img src="/user/comment/captcha/{{.CaptchaID}}" alt="CAPTCHA">
+        <input type="hidden" name="captchaId" value="{{.CaptchaID}}">
+        <label for="captchaSolution">Enter Captcha:</label>
+        <input type="text" id="captchaSolution" name="captchaSolution"><br><br>
+
+        <input type="submit" value="Submit">
+    </form>
+</body>
+</html>

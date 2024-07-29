@@ -11,15 +11,23 @@ import (
 
 func CreateComment(c echo.Context) error {
 	var req payload.AddComment
-	c.Bind(&req)
+	if err := c.Bind(&req); err != nil {
+		return c.JSON(http.StatusBadRequest, map[string]string{
+			"error": "Failed to parse request",
+		})
+	}
 	if err := c.Validate(req); err != nil {
-		return err
+		return c.JSON(http.StatusBadRequest, map[string]string{
+			"error": "Validation failed",
+		})
 	}
 	if err := usecase.CreateComment(&req); err != nil {
-		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
+		return c.JSON(http.StatusBadRequest, map[string]string{
+			"error": err.Error(),
+		})
 	}
 	return c.JSON(http.StatusOK, map[string]interface{}{
-		"message": "success create commentar",
+		"message": "success create comment",
 	})
 }
 

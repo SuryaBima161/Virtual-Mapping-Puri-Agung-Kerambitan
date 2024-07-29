@@ -3,6 +3,7 @@ module demonstrasi
 go 1.20
 
 require (
+	github.com/dchest/captcha v1.0.0
 	github.com/joho/godotenv v1.5.1
 	github.com/labstack/echo-jwt/v4 v4.2.0
 	golang.org/x/crypto v0.23.0
