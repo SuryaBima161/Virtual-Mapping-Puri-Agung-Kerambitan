@@ -30,17 +30,6 @@ func New() *echo.Echo {
 
 	m.LoggerMiddleware(e)
 	e.Use(middleware.Recover())
-
-	// CORS middleware
-	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
-		AllowOrigins: []string{
-			"http://localhost:3000",
-			"http://v8ftmpnc-3000.asse.devtunnels.ms",
-			"https://v57q9chz-3000.asse.devtunnels.ms",
-		},
-		AllowMethods: []string{echo.GET, echo.POST, echo.PUT, echo.DELETE},
-		AllowHeaders: []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept, echo.HeaderAuthorization},
-	}))
 	// ga perlu login
 	e.POST("/register", controllers.RegisterController)
 	e.POST("/login", controllers.LoginController)
