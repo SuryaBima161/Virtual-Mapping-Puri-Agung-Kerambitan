@@ -8,35 +8,6 @@ import (
 	"github.com/labstack/echo/v4"
 	uuid "github.com/satori/go.uuid"
 )
-
-// func CreateGalery(c echo.Context) error {
-// 	// Get userID from authenticated user
-// 	userID := middlewares.GetUserLoginId(c)
-// 	// Parse request body
-// 	req := new(payload.AddToCart)
-// 	if err := c.Bind(req); err != nil {
-// 		return echo.NewHTTPError(http.StatusBadRequest, "Invalid request payload")
-// 	}
-
-// 	// Validate request
-// 	if err := c.Validate(req); err != nil {
-// 		return err
-// 	}
-
-// 	// Add to cart
-// 	err := usecase.AddToCart(userID, req.ProductID, req.Quantity)
-// 	if err != nil {
-// 		if strings.Contains(err.Error(), "product stock is not available") {
-// 			return echo.NewHTTPError(http.StatusBadRequest, "Product stock is not available")
-// 		}
-// 		return echo.NewHTTPError(http.StatusInternalServerError, "Failed to add to cart")
-// 	}
-
-// 	return c.JSON(http.StatusOK, map[string]interface{}{
-// 		"message": "Product added to cart successfully",
-// 	})
-// }
-
 func CreateGalery(c echo.Context) error {
 	var req payload.AddGalery
 	c.Bind(&req)
@@ -80,15 +51,26 @@ func GetHomePage(c echo.Context) error {
 }
 
 func UpdateGalery(c echo.Context) error {
+	// Bind the payload
 	var inf payload.UpdateGalery
 	id := c.Param("id")
-	c.Bind(&inf)
+	if err := c.Bind(&inf); err != nil {
+		return err
+	}
 	if err := c.Validate(inf); err != nil {
 		return err
 	}
-	if err := usecase.UpdateGalery(uuid.FromStringOrNil(id), &inf); err != nil {
+
+	image, err := c.FormFile("image")
+	if err != nil && err != http.ErrMissingFile {
+		return echo.NewHTTPError(http.StatusBadRequest, "Failed to read image file: "+err.Error())
+	}
+
+	if err := usecase.UpdateGalery(uuid.FromStringOrNil(id), &inf, image); err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
+
+	// Return success response
 	return c.JSON(http.StatusOK, map[string]interface{}{
 		"message": "success update galery",
 	})

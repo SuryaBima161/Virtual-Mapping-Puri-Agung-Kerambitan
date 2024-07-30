@@ -23,7 +23,7 @@ func CreateMonument(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
 	return c.JSON(http.StatusOK, map[string]interface{}{
-		"message": "success create Monument",
+		"message": "success create monument",
 	})
 }
 
@@ -54,20 +54,28 @@ func GetMonumentById(c echo.Context) error {
 }
 
 func UpdateMonument(c echo.Context) error {
-	var mon payload.UpdateMonument
+	var inf payload.UpdateMonument
 	id := c.Param("id")
-	c.Bind(&mon)
-	if err := c.Validate(mon); err != nil {
+	if err := c.Bind(&inf); err != nil {
 		return err
 	}
-	if err := usecase.UpdateMonument(uuid.FromStringOrNil(id), &mon); err != nil {
+	if err := c.Validate(inf); err != nil {
+		return err
+	}
+
+	image, err := c.FormFile("image")
+	if err != nil && err != http.ErrMissingFile {
+		return echo.NewHTTPError(http.StatusBadRequest, "Failed to read image file: "+err.Error())
+	}
+
+	if err := usecase.UpdateMonument(uuid.FromStringOrNil(id), &inf, image); err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
+
 	return c.JSON(http.StatusOK, map[string]interface{}{
 		"message": "success update monument",
 	})
 }
-
 func DeleteMonument(c echo.Context) error {
 	id := c.Param("id")
 	if err := usecase.DeleteMonument(uuid.FromStringOrNil(id)); err != nil {

@@ -14,17 +14,39 @@ func CreateComment(req *models.TbComment) error {
 	return nil
 }
 
-func GetComment() ([]models.TbComment, error) {
-	var comment []models.TbComment
+func GetCommentValidated(status string) ([]models.TbComment, error) {
+	var comments []models.TbComment
 	db := config.DB
-	if err := db.Find(&comment).Error; err != nil {
-		return comment, err
+	if status != "" {
+		db = db.Where("status = ?", status)
 	}
-	return comment, nil
+
+	if err := db.Find(&comments).Error; err != nil {
+		return comments, err
+	}
+
+	return comments, nil
+}
+func GetComment() ([]models.TbComment, error) {
+	var comments []models.TbComment
+	db := config.DB
+	if err := db.Preload("TbGalery.TbInformation").Find(&comments).Error; err != nil {
+		return nil, err
+	}
+
+	return comments, nil
 }
 
 func GetCommentById(id uuid.UUID) (resp models.TbComment, err error) {
 	if err := config.DB.Where("id = ?", id).First(&resp).Error; err != nil {
+		return resp, err
+	}
+	return
+}
+
+func GetCommentByIdGalery(id uuid.UUID) (resp []models.TbComment, err error) {
+	if err := config.DB.Preload("TbGalery.TbInformation").Where("id_galery = ?", id).Find(&resp).Error; err != nil {
+
 		return resp, err
 	}
 	return
@@ -45,4 +67,9 @@ func UpdateReplyComment(id uuid.UUID, inf *models.TbComment) error {
 	return nil
 }
 
-
+func ValidateComment(id uuid.UUID, inf *models.TbComment) error {
+	if err := config.DB.Model(inf).Where("id = ?", id).Updates(inf).Error; err != nil {
+		return err
+	}
+	return nil
+}

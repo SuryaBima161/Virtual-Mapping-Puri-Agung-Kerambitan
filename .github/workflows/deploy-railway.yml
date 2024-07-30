@@ -1,0 +1,30 @@
+name: Deploy to Railway
+
+on:
+  push:
+    branches:
+      - testdeploy  # Atau branch lain yang ingin Anda deploy
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Install Railway CLI
+      run: curl -sSL https://cli.railway.app/install.sh | sh
+
+    - name: Deploy to Railway
+      env:
+        RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+      run: railway up
+
+    - name: Run database migrations
+      env:
+        RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+      run: |
+        # Menjalankan perintah migrasi database
+        # Ganti `your_migration_script.go` dengan file yang menjalankan migrasi Anda
+        railway run -- go run your_migration_script.go

@@ -11,15 +11,23 @@ import (
 
 func CreateComment(c echo.Context) error {
 	var req payload.AddComment
-	c.Bind(&req)
+	if err := c.Bind(&req); err != nil {
+		return c.JSON(http.StatusBadRequest, map[string]string{
+			"error": "Failed to parse request",
+		})
+	}
 	if err := c.Validate(req); err != nil {
-		return err
+		return c.JSON(http.StatusBadRequest, map[string]string{
+			"error": "Validation failed",
+		})
 	}
 	if err := usecase.CreateComment(&req); err != nil {
-		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
+		return c.JSON(http.StatusBadRequest, map[string]string{
+			"error": err.Error(),
+		})
 	}
 	return c.JSON(http.StatusOK, map[string]interface{}{
-		"message": "success create commentar",
+		"message": "success create comment",
 	})
 }
 
@@ -33,16 +41,28 @@ func DeleteComment(c echo.Context) error {
 	})
 }
 
+func GetCommentValidated(c echo.Context) error {
+	status := "validated"
+	comments, err := usecase.GetCommentValidated(status)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
+	}
+
+	return c.JSON(http.StatusOK, map[string]interface{}{
+		"message": "success get all validated comments",
+		"data":    comments,
+	})
+}
+
 func GetComment(c echo.Context) error {
-	var comment []payload.GetCommentRespone
-	comment, err := usecase.GetComment()
+	comments, err := usecase.GetComment()
 	if err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
 
 	return c.JSON(http.StatusOK, map[string]interface{}{
 		"message": "success get all comments",
-		"data":    comment,
+		"data":    comments,
 	})
 }
 
@@ -54,6 +74,19 @@ func GetCommentById(c echo.Context) error {
 	}
 	return c.JSON(http.StatusOK, map[string]interface{}{
 		"message": "success get comment by id",
+		"data":    comment,
+	})
+
+}
+
+func GetCommentByIdGalery(c echo.Context) error {
+	id := c.Param("id")
+	comment, err := usecase.GetCommentByGalleryID(uuid.FromStringOrNil(id))
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
+	}
+	return c.JSON(http.StatusOK, map[string]interface{}{
+		"message": "success get comment by id galery",
 		"data":    comment,
 	})
 
@@ -71,5 +104,20 @@ func UpdateReplyComment(c echo.Context) error {
 	}
 	return c.JSON(http.StatusOK, map[string]interface{}{
 		"message": "success reply comment",
+	})
+}
+
+func ValidateComment(c echo.Context) error {
+	var inf payload.ValidateComment
+	id := c.Param("id")
+	c.Bind(&inf)
+	if err := c.Validate(inf); err != nil {
+		return err
+	}
+	if err := usecase.ValidateComment(uuid.FromStringOrNil(id), &inf); err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
+	}
+	return c.JSON(http.StatusOK, map[string]interface{}{
+		"message": "success validate comment",
 	})
 }
