@@ -25,15 +25,6 @@ func main() {
 	config.InitialMigration(DB)
 	log.Println("Database migration completed!")
 
-	// Example of using DB for a query
-	var count int64
-	err = DB.Table("some_table").Count(&count).Error
-	if err != nil {
-		log.Printf("Error querying database: %v", err)
-	} else {
-		log.Printf("Count of records: %d", count)
-	}
-
 	e := route.New()
 	e.Validator = &util.CustomValidator{
 		Validator: validator.New(),
