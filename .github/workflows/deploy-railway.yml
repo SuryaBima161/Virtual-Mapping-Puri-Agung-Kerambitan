@@ -19,12 +19,21 @@ jobs:
     - name: Deploy to Railway
       env:
         RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+        MYSQL_USER: ${{ secrets.MYSQL_USER }}
+        MYSQL_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
+        MYSQL_PORT: ${{ secrets.MYSQL_PORT }}
+        MYSQL_HOST: ${{ secrets.MYSQL_HOST }}
+        MYSQL_DATABASE: ${{ secrets.MYSQL_DATABASE }}
       run: railway up
 
+    # (Opsional) Langkah untuk menjalankan migrasi database
     - name: Run database migrations
       env:
         RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+        MYSQL_USER: ${{ secrets.MYSQL_USER }}
+        MYSQL_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
+        MYSQL_PORT: ${{ secrets.MYSQL_PORT }}
+        MYSQL_HOST: ${{ secrets.MYSQL_HOST }}
+        MYSQL_DATABASE: ${{ secrets.MYSQL_DATABASE }}
       run: |
-        # Menjalankan perintah migrasi database
-        # Ganti `your_migration_script.go` dengan file yang menjalankan migrasi Anda
-        railway run -- go run your_migration_script.go
+        railway run -- [migration command]
