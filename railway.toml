@@ -1,0 +1,7 @@
+[project]
+name = "be-puri"
+
+[service "web"]
+build = {
+  dockerfile = "./Dockerfile"
+}

@@ -20,3 +20,11 @@ jobs:
       env:
         RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
       run: railway up
+
+    - name: Run database migrations
+      env:
+        RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+      run: |
+        # Menjalankan perintah migrasi database
+        # Ganti `your_migration_script.go` dengan file yang menjalankan migrasi Anda
+        railway run -- go run your_migration_script.go
