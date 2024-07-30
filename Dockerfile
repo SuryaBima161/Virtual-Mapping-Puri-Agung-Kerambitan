@@ -21,16 +21,11 @@ COPY --from=builder /docker-api /docker-api
 # Copy the templates from the build stage
 COPY --from=builder /app/templates /app/templates
 
-# Jika ada dependensi runtime yang diperlukan, tambahkan di sini
-# Misalnya, jika aplikasi Anda memerlukan ca-certificates
-RUN apk add --no-cache ca-certificates
+# Salin file .env jika masih perlu untuk pengembangan
+COPY .env .env
 
-# Atur variabel lingkungan jika diperlukan
-ENV MYSQL_USER=root
-ENV MYSQL_PASSWORD=wihpGGgSlrCkUieNGflJKzjrBWrcnPaw
-ENV MYSQL_HOST=monorail.proxy.rlwy.net
-ENV MYSQL_PORT=23451
-ENV MYSQL_DATABASE=railway
+# Jika ada dependensi runtime yang diperlukan, tambahkan di sini
+RUN apk add --no-cache ca-certificates
 
 EXPOSE 4040
 
