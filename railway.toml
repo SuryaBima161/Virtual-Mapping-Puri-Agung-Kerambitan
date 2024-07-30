@@ -1,7 +1,6 @@
 [project]
 name = "be-puri"
 
-[service "web"]
-build = {
-  dockerfile = "./Dockerfile"
-}
+[[services]]
+name = "web"
+build = { dockerfile = "./Dockerfile" }
