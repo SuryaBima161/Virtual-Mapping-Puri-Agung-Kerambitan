@@ -15,18 +15,24 @@ var (
 )
 
 func InitDB() {
-	var err error
+	fmt.Printf("MYSQLUSER: %s\n", os.Getenv("MYSQLUSER"))
+	fmt.Printf("MYSQLPASSWORD: %s\n", os.Getenv("MYSQLPASSWORD"))
+	fmt.Printf("MYSQLHOST: %s\n", os.Getenv("MYSQLHOST"))
+	fmt.Printf("MYSQLPORT: %s\n", os.Getenv("MYSQLPORT"))
+	fmt.Printf("MYSQLDATABASE: %s\n", os.Getenv("MYSQLDATABASE"))
+
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8&parseTime=True&loc=Local",
 		os.Getenv("MYSQLUSER"),
 		os.Getenv("MYSQLPASSWORD"),
 		os.Getenv("MYSQLHOST"),
-		os.Getenv("MYSQLPASSWORD"),
+		os.Getenv("MYSQLPORT"), // Pastikan ini diperbaiki
 		os.Getenv("MYSQLDATABASE"),
 	)
 
 	// Log connection string for debugging
 	fmt.Printf("Connecting to database with DSN: %s\n", dsn)
 
+	var err error
 	DB, err = gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {
 		log.Fatalf("Failed to connect to database: %v", err)
