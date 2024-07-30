@@ -41,9 +41,6 @@ func New() *echo.Echo {
 		AllowMethods: []string{echo.GET, echo.POST, echo.PUT, echo.DELETE},
 		AllowHeaders: []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept, echo.HeaderAuthorization},
 	}))
-
-	e.Pre(middleware.RemoveTrailingSlash())
-
 	// ga perlu login
 	e.POST("/register", controllers.RegisterController)
 	e.POST("/login", controllers.LoginController)
@@ -52,6 +49,8 @@ func New() *echo.Echo {
 	e.GET("/galery", controllers.GetGalery)
 	e.GET("/monument", controllers.GetMonument)
 	e.GET("/comment", controllers.GetCommentValidated)
+
+	e.Pre(middleware.RemoveTrailingSlash())
 
 	// ---
 	admin := e.Group("/admin", jwt.JWT([]byte(constants.SECRET_KEY)))
