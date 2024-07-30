@@ -21,9 +21,6 @@ COPY --from=builder /docker-api /docker-api
 # Copy the templates from the build stage
 COPY --from=builder /app/templates /app/templates
 
-# Salin file .env jika masih perlu untuk pengembangan
-COPY .env .env
-
 # Jika ada dependensi runtime yang diperlukan, tambahkan di sini
 RUN apk add --no-cache ca-certificates
 
