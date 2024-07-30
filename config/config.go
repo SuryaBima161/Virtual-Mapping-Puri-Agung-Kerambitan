@@ -30,6 +30,14 @@ func InitDB() {
 		DB_Name:     os.Getenv("MYSQL_DATABASE"),
 	}
 
+	fmt.Printf("Connecting to database with: %s:%s@tcp(%s:%s)/%s\n",
+		config.DB_Username,
+		config.DB_Password,
+		config.DB_Host,
+		config.DB_Port,
+		config.DB_Name,
+	)
+
 	connectionString := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8&parseTime=True&loc=Local",
 		config.DB_Username,
 		config.DB_Password,

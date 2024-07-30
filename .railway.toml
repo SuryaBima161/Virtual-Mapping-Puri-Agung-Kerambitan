@@ -7,6 +7,5 @@ build = {
   dockerfile = "./Dockerfile"  # Path relatif ke Dockerfile
 }
 
-[service "web"]
 # Konfigurasi port yang digunakan aplikasi
 port = 4040
