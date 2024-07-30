@@ -14,36 +14,36 @@ var (
 )
 
 type Config struct {
-	DB_Username string
-	DB_Password string
-	DB_Port     string
-	DB_Host     string
-	DB_Name     string
+	MYSQL_USER     string
+	MYSQL_PASSWORD string
+	MYSQL_PORT     string
+	MYSQL_HOST     string
+	MYSQL_DATABASE string
 }
 
 func InitDB() {
 	config := Config{
-		DB_Username: os.Getenv("MYSQL_USER"),
-		DB_Password: os.Getenv("MYSQL_PASSWORD"),
-		DB_Port:     os.Getenv("MYSQL_PORT"),
-		DB_Host:     os.Getenv("MYSQL_HOST"),
-		DB_Name:     os.Getenv("MYSQL_DATABASE"),
+		MYSQL_USER:     os.Getenv("MYSQL_USER"),
+		MYSQL_PASSWORD: os.Getenv("MYSQL_PASSWORD"),
+		MYSQL_PORT:     os.Getenv("MYSQL_PORT"),
+		MYSQL_HOST:     os.Getenv("MYSQL_HOST"),
+		MYSQL_DATABASE: os.Getenv("MYSQL_DATABASE"),
 	}
 
 	fmt.Printf("Connecting to database with: %s:%s@tcp(%s:%s)/%s\n",
-		config.DB_Username,
-		config.DB_Password,
-		config.DB_Host,
-		config.DB_Port,
-		config.DB_Name,
+		config.MYSQL_USER,
+		config.MYSQL_PASSWORD,
+		config.MYSQL_PORT,
+		config.MYSQL_HOST,
+		config.MYSQL_DATABASE,
 	)
 
 	connectionString := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8&parseTime=True&loc=Local",
-		config.DB_Username,
-		config.DB_Password,
-		config.DB_Host,
-		config.DB_Port,
-		config.DB_Name,
+		config.MYSQL_USER,
+		config.MYSQL_PASSWORD,
+		config.MYSQL_PORT,
+		config.MYSQL_HOST,
+		config.MYSQL_DATABASE,
 	)
 
 	var err error
